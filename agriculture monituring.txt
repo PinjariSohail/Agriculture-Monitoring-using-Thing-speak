@@ -1,0 +1,42 @@
+#include <WiFi.h>
+#include "DHT.h"
+#include <Wire.h>
+
+int LDR_val = 0;
+int sensor = 34;
+#define soil_moisture_pin 4 
+
+DHT dht(13,DHT11);
+float hum,temp;
+
+void setup()
+{
+  Serial.begin(115200);
+
+  dht.begin();
+}
+
+void loop()
+{
+  DHT_data();
+  
+  LDR_val = analogRead(sensor);
+  Serial.print("light percentage: ");
+  Serial.print(LDR_val/50);
+  Serial.println("%");
+  Serial.print("humdity: ");
+  Serial.println(hum);
+  Serial.print("temperature: ");
+  Serial.println(temp);
+  Serial.print("soil moisture: ");
+  Serial.print(analogRead(soil_moisture_pin)/100);
+  Serial.println("%");
+  Serial.println("  ");
+  delay(1000);
+}
+
+void DHT_data()
+{
+  hum = dht.readHumidity();
+  temp = dht.readTemperature(); 
+}
